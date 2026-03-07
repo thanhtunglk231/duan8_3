@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quốc tế phụ nữ</title>
+    <link rel="icon" type="image/png" href="image/favicon.ico">
+
+    <link rel="stylesheet" href="./renxi/default.css">
+
+    <script src="./renxi/jquery.min.js"></script>
+    <script src="./renxi/jscex.min.js"></script>
+    <script src="./renxi/jscex-parser.js"></script>
+    <script src="./renxi/jscex-jit.js"></script>
+    <script src="./renxi/jscex-builderbase.min.js"></script>
+    <script src="./renxi/jscex-async.min.js"></script>
+    <script src="./renxi/jscex-async-powerpack.min.js"></script>
+    <script src="./renxi/functions.js" charset="utf-8"></script>
+    <script src="./renxi/love.js" charset="utf-8"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #fffafc;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+        }
+
+        #main {
+            width: 100%;
+            min-height: 100vh;
+            padding: 52px 0 30px; /* hạ main xuống thấp hơn */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #error {
+            display: none;
+            text-align: center;
+            color: red;
+            margin-bottom: 15px;
+            padding: 0 16px;
+        }
+
+        #scene {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+
+        #wrap {
+            position: relative;
+            width: 1100px;
+            height: 680px;
+            transform-origin: top center;
+            transition: transform 0.35s ease;
+            will-change: transform;
+        }
+
+        #canvas {
+            display: block;
+            width: 1100px;
+            height: 680px;
+            touch-action: manipulation;
+        }
+
+        #text {
+            position: absolute;
+            top: 120px;
+            left: 48px;
+            z-index: 2;
+            width: 450px !important; /* rộng hơn một chút */
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            pointer-events: none;
+        }
+
+        #code {
+            display: none;
+            line-height: 1.9;
+            font-size: 24px;
+            padding: 0; /* bỏ khung */
+            border-radius: 0;
+            background: transparent; /* bỏ nền trắng */
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: none;
+        }
+
+        #code img {
+            max-width: 52px;
+            height: auto;
+        }
+
+        #clock-box {
+            position: absolute;
+            left: 70px;
+            bottom: 18px;
+            z-index: 2;
+            font-size: 24px;
+            line-height: 1.6;
+            pointer-events: none;
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.38);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+        }
+
+        #clock {
+            margin-top: 8px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #d63384;
+        }
+
+        .footer-contact {
+            text-align: center;
+            margin: 26px 0 10px;
+            font: normal 14px/24px 'MicroSoft YaHei', sans-serif;
+            color: #444;
+            padding: 0 12px;
+        }
+
+        .footer-contact a {
+            color: #d63384;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #music-widget {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 9999;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        #music-toggle {
+            width: 54px;
+            height: 54px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff5fa2, #ff85b7);
+            color: #fff;
+            font-size: 28px;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(255, 95, 162, 0.35);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        #music-toggle:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 22px rgba(255, 95, 162, 0.45);
+        }
+
+        #music-panel {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 12px;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            box-sizing: border-box;
+            transform: translateX(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #music-widget.open #music-panel {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #music-panel strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #d63384;
+            font-size: 14px;
+        }
+
+        #musicSelect,
+        #bgMusic {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #musicSelect {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        @media (max-width: 768px) {
+            #main {
+                padding-top: 190px; /* xuống thêm một chút trên mobile */
+            }
+            #scene{
+                height: 271px !important;
+            }
+            #text{
+                left: 24px;
+    top: 50px !important;
+    width: 450px !important;
+            }
+            #music-widget {
+                top: 10px;
+                right: 85px;
+                gap: 8px;
+            }
+
+            #music-toggle {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+
+            #music-panel {
+                width: min(230px, calc(100vw - 76px));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="music-widget">
+        <button id="music-toggle" title="Mở danh sách nhạc">♪</button>
+
+        <div id="music-panel">
+            <strong>Chọn bài hát</strong>
+            <select id="musicSelect">
+                <option value="music/Noi_nay_co_anh.mp3">Nơi này có anh</option>
+                <option value="music/I-Do-911.mp3">I Do - 911</option>
+            </select>
+
+            <audio id="bgMusic" controls autoplay>
+                <source src="music/nhac.mp3" type="audio/mp3">
+                Trình duyệt không hỗ trợ audio.
+            </audio>
+        </div>
+    </div>
+
+    <div id="main">
+        <div id="error">
+            Trình duyệt của bạn không được hỗ trợ. Để được hỗ trợ liên hệ daikupj@gmail.com.
+            Hoặc sử dụng (<a href="http://www.google.cn/chrome" target="_blank">Chrome</a>) và
+            (<a href="http://firefox.com/download/" target="_blank">Firefox</a>)
+        </div>
+
+        <div id="scene">
+            <div id="wrap">
+                <div id="text">
+                    <div id="code">
+                        <font color="#0000FF">
+                            <span class="say">Chào các bạn!</span><br>
+                            <span class="say"> </span><br>
+                            <span class="say">Ngày 8/3 chúc một nửa thế giới luôn thành công trong cuộc sống!</span><br>
+                            <span class="say">Chúc bạn luôn duyên dáng và xinh đẹp trong mắt một nửa thế giới còn lại.</span><br>
+                            <span class="say">Kính chúc "một nửa" của nhân loại vui vẻ, hạnh phúc bên người thân yêu</span><br>
+                            <span class="say">
+                                <span class="space">
+                                    <img src="image/tym.png" alt=""><br>
+                                </span>
+                            </span>
+                            <span class="say">
+                                <span class="space"></span> --Lớp trưởng--
+                            </span>
+                        </font>
+                    </div>
+                </div>
+<!-- 
+                <div id="clock-box">
+                    <span class="STYLE1"></span>
+                    <font color="#FF0000">Ngày 8/3 cuối cùng ta ngồi với nhau đến nay đã....</font>
+                    <div id="clock"></div>
+                </div> -->
+
+                <canvas id="canvas" width="1100" height="680"></canvas>
+            </div>
+        </div>
+
+        <div class="footer-contact">
+            <p>From: <a href="https://www.facebook.com/dai.vudangdai" target="_blank">Thanh Tung</a></p>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var musicWidget = document.getElementById("music-widget");
+            var musicToggle = document.getElementById("music-toggle");
+            var musicSelect = document.getElementById("musicSelect");
+            var bgMusic = document.getElementById("bgMusic");
+
+            musicToggle.addEventListener("click", function (e) {
+                e.stopPropagation();
+                musicWidget.classList.toggle("open");
+            });
+
+            musicSelect.addEventListener("change", function () {
+                bgMusic.src = this.value;
+                bgMusic.load();
+                bgMusic.play().catch(function () {});
+            });
+
+            document.addEventListener("click", function (e) {
+                if (!musicWidget.contains(e.target)) {
+                    musicWidget.classList.remove("open");
+                }
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var wrap = document.getElementById("wrap");
+            var scene = document.getElementById("scene");
+            var baseWidth = 1100;
+            var baseHeight = 680;
+
+            function resizeScene() {
+                var viewportWidth = window.innerWidth;
+                var isMobile = viewportWidth <= 768;
+
+                var horizontalPadding = isMobile ? 10 : 40;
+                var availableWidth = viewportWidth - horizontalPadding;
+                var scale = Math.min(availableWidth / baseWidth, 1);
+
+                if (isMobile) {
+                    scale = scale * 1.06;
+                }
+
+                scale = Math.min(scale, 1);
+
+                wrap.style.transform = "scale(" + scale + ")";
+                scene.style.height = (baseHeight * scale) + "px";
+
+                var text = document.getElementById("text");
+                var code = document.getElementById("code");
+                var clockBox = document.getElementById("clock-box");
+                var clock = document.getElementById("clock");
+
+                if (isMobile) {
+                    text.style.left = "24px";
+                    text.style.top = "210px";
+                    text.style.width = "340px"; /* rộng hơn trên mobile */
+
+                    code.style.fontSize = "28px";
+                    code.style.lineHeight = "1.95";
+                    code.style.padding = "0";
+                    code.style.borderRadius = "0";
+                    code.style.background = "transparent";
+
+                    clockBox.style.left = "32px";
+                    clockBox.style.bottom = "6px";
+                    clockBox.style.width = "300px";
+                    clockBox.style.fontSize = "22px";
+                    clockBox.style.lineHeight = "1.5";
+                    clockBox.style.padding = "10px 14px";
+                    clockBox.style.background = "rgba(255,255,255,0.62)";
+
+                    clock.style.fontSize = "28px";
+
+                    var heartImg = document.querySelector("#code img");
+                    if (heartImg) {
+                        heartImg.style.maxWidth = "44px";
+                    }
+                } else {
+                    text.style.left = "48px";
+                    text.style.top = "120px";
+                    text.style.width = "500px";
+
+                    code.style.fontSize = "24px";
+                    code.style.lineHeight = "1.9";
+                    code.style.padding = "0";
+                    code.style.borderRadius = "0";
+                    code.style.background = "transparent";
+
+                    clockBox.style.left = "70px";
+                    clockBox.style.bottom = "18px";
+                    clockBox.style.width = "auto";
+                    clockBox.style.fontSize = "24px";
+                    clockBox.style.lineHeight = "1.6";
+                    clockBox.style.padding = "10px 14px";
+                    clockBox.style.background = "rgba(255,255,255,0.38)";
+
+                    clock.style.fontSize = "26px";
+
+                    var heartImgDesktop = document.querySelector("#code img");
+                    if (heartImgDesktop) {
+                        heartImgDesktop.style.maxWidth = "52px";
+                    }
+                }
+            }
+
+            resizeScene();
+            window.addEventListener("resize", resizeScene);
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var canvas = $('#canvas');
+
+            if (!canvas[0].getContext) {
+                $("#error").show();
+                return false;
+            }
+
+            var width = 1100;
+            var height = 680;
+
+            canvas.attr("width", width);
+            canvas.attr("height", height);
+
+            var opts = {
+                seed: {
+                    x: width / 2 - 20,
+                    color: "rgb(190, 26, 37)",
+                    scale: 2
+                },
+                branch: [
+                    [535, 680, 570, 250, 500, 200, 30, 100, [
+                        [540, 500, 455, 417, 340, 400, 13, 100, [
+                            [450, 435, 434, 430, 394, 395, 2, 40]
+                        ]],
+                        [550, 445, 600, 356, 680, 345, 12, 100, [
+                            [578, 400, 648, 409, 661, 426, 3, 80]
+                        ]],
+                        [539, 281, 537, 248, 534, 217, 3, 40],
+                        [546, 397, 413, 247, 328, 244, 9, 80, [
+                            [427, 286, 383, 253, 371, 205, 2, 40],
+                            [498, 345, 435, 315, 395, 330, 4, 60]
+                        ]],
+                        [546, 357, 608, 252, 678, 221, 6, 100, [
+                            [590, 293, 646, 277, 648, 271, 2, 80]
+                        ]]
+                    ]]
+                ],
+                bloom: {
+                    num: 700,
+                    width: 1080,
+                    height: 650
+                },
+                footer: {
+                    width: 1200,
+                    height: 5,
+                    speed: 10
+                }
+            };
+
+            var tree = new Tree(canvas[0], width, height, opts);
+            var seed = tree.seed;
+            var foot = tree.footer;
+            var hold = 1;
+
+            function getPointFromEvent(e) {
+                var rect = canvas[0].getBoundingClientRect();
+                var clientX, clientY;
+
+                if (e.originalEvent && e.originalEvent.touches && e.originalEvent.touches.length > 0) {
+                    clientX = e.originalEvent.touches[0].clientX;
+                    clientY = e.originalEvent.touches[0].clientY;
+                } else if (e.originalEvent && e.originalEvent.changedTouches && e.originalEvent.changedTouches.length > 0) {
+                    clientX = e.originalEvent.changedTouches[0].clientX;
+                    clientY = e.originalEvent.changedTouches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+
+                var scaleX = width / rect.width;
+                var scaleY = height / rect.height;
+
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function tryOpenSeed(e) {
+                var point = getPointFromEvent(e);
+
+                if (seed.hover(point.x, point.y)) {
+                    hold = 0;
+                    canvas.off("click touchstart mousemove");
+                    canvas.removeClass("hand");
+                }
+            }
+
+            canvas.on("click", function (e) {
+                tryOpenSeed(e);
+            });
+
+            canvas.on("touchstart", function (e) {
+                e.preventDefault();
+                tryOpenSeed(e);
+            });
+
+            canvas.on("mousemove", function (e) {
+                var point = getPointFromEvent(e);
+                canvas.toggleClass("hand", seed.hover(point.x, point.y));
+            });
+
+            var seedAnimate = eval(Jscex.compile("async", function () {
+                seed.draw();
+                while (hold) {
+                    $await(Jscex.Async.sleep(10));
+                }
+                while (seed.canScale()) {
+                    seed.scale(0.95);
+                    $await(Jscex.Async.sleep(10));
+                }
+                while (seed.canMove()) {
+                    seed.move(0, 2);
+                    foot.draw();
+                    $await(Jscex.Async.sleep(10));
+                }
+            }));
+
+            var growAnimate = eval(Jscex.compile("async", function () {
+                do {
+                    tree.grow();
+                    $await(Jscex.Async.sleep(10));
+                } while (tree.canGrow());
+            }));
+
+            var flowAnimate = eval(Jscex.compile("async", function () {
+                do {
+                    tree.flower(2);
+                    $await(Jscex.Async.sleep(10));
+                } while (tree.canFlower());
+            }));
+
+            var moveAnimate = eval(Jscex.compile("async", function () {
+                tree.snapshot("p1", 240, 0, 610, 680);
+                while (tree.move("p1", 500, 0)) {
+                    foot.draw();
+                    $await(Jscex.Async.sleep(10));
+                }
+                foot.draw();
+                tree.snapshot("p2", 500, 0, 610, 680);
+
+                canvas.parent().css("background", "url(" + tree.toDataURL("image/png") + ")");
+                canvas.css("background", "#ffe");
+                $await(Jscex.Async.sleep(300));
+                canvas.css("background", "none");
+            }));
+
+            var jumpAnimate = eval(Jscex.compile("async", function () {
+                while (true) {
+                    tree.ctx.clearRect(0, 0, width, height);
+                    tree.jump();
+                    foot.draw();
+                    $await(Jscex.Async.sleep(25));
+                }
+            }));
+
+            var textAnimate = eval(Jscex.compile("async", function () {
+                var together = new Date();
+                together.setFullYear(2018, 2, 8);
+                together.setHours(0);
+                together.setMinutes(0);
+                together.setSeconds(0);
+                together.setMilliseconds(0);
+
+                $("#code").show().typewriter();
+                $("#clock-box").fadeIn(500);
+
+                while (true) {
+                    timeElapse(together);
+                    $await(Jscex.Async.sleep(1000));
+                }
+            }));
+
+            var runAsync = eval(Jscex.compile("async", function () {
+                $await(seedAnimate());
+                $await(growAnimate());
+                $await(flowAnimate());
+                $await(moveAnimate());
+
+                textAnimate().start();
+                $await(jumpAnimate());
+            }));
+
+            runAsync().start();
+        })();
+    </script>
+</body>
+</html> 
