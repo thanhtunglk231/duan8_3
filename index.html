@@ -3,21 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp chúc mừng 8/3 🌸</title>
+    <meta name="description" content="Chúc một nửa thế giới luôn xinh đẹp, hạnh phúc và thành công trong cuộc sống ❤️">
 
-    <title>Thiệp 8/3</title>
-
+    <!-- Open Graph: dùng cho Facebook, Messenger, Zalo và nhiều app chat -->
     <meta property="og:title" content="Thiệp chúc mừng 8/3 🌸">
-    <meta property="og:description" content="Chúc một nửa thế giới luôn xinh đẹp và hạnh phúc ❤️">
+    <meta property="og:description" content="Chúc một nửa thế giới luôn xinh đẹp, hạnh phúc và thành công trong cuộc sống ❤️">
     <meta property="og:image" content="https://thanhtunglk231.github.io/duan8_3/image/preview.png">
+    <meta property="og:image:secure_url" content="https://thanhtunglk231.github.io/duan8_3/image/preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://thanhtunglk231.github.io/duan8_3/">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Thiệp 8/3">
 
-<link rel="icon" type="image/png" href="image/favicon.ico">
-    <link rel="icon" type="image/png" href="image/favicon.ico">
+    <!-- Twitter/X preview -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thiệp chúc mừng 8/3 🌸">
+    <meta name="twitter:description" content="Chúc một nửa thế giới luôn xinh đẹp, hạnh phúc và thành công trong cuộc sống ❤️">
+    <meta name="twitter:image" content="https://thanhtunglk231.github.io/duan8_3/image/preview.png">
 
+    <link rel="icon" href="image/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./renxi/default.css">
 
     <script src="./renxi/jquery.min.js"></script>
@@ -46,7 +52,7 @@
         #main {
             width: 100%;
             min-height: 100vh;
-            padding: 52px 0 30px; /* hạ main xuống thấp hơn */
+            padding: 52px 0 30px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -90,7 +96,7 @@
             top: 120px;
             left: 48px;
             z-index: 2;
-            width: 450px !important; /* rộng hơn một chút */
+            width: 450px;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             pointer-events: none;
         }
@@ -99,11 +105,9 @@
             display: none;
             line-height: 1.9;
             font-size: 24px;
-            padding: 0; /* bỏ khung */
+            padding: 0;
             border-radius: 0;
-            background: transparent; /* bỏ nền trắng */
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
+            background: transparent;
             box-shadow: none;
         }
 
@@ -112,33 +116,10 @@
             height: auto;
         }
 
-        #clock-box {
-            position: absolute;
-            left: 70px;
-            bottom: 18px;
-            z-index: 2;
-            font-size: 24px;
-            line-height: 1.6;
-            pointer-events: none;
-            padding: 10px 14px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.38);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
-        }
-
-        #clock {
-            margin-top: 8px;
-            font-size: 26px;
-            font-weight: bold;
-            color: #d63384;
-        }
-
         .footer-contact {
             text-align: center;
             margin: 26px 0 10px;
-            font: normal 14px/24px 'MicroSoft YaHei', sans-serif;
+            font: normal 14px/24px 'Microsoft YaHei', sans-serif;
             color: #444;
             padding: 0 12px;
         }
@@ -179,7 +160,7 @@
         }
 
         #music-panel {
-            width: 250px;
+            width: 260px;
             background: rgba(255, 255, 255, 0.97);
             padding: 12px;
             border-radius: 14px;
@@ -204,6 +185,13 @@
             font-size: 14px;
         }
 
+        #music-tip {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
         #musicSelect,
         #bgMusic {
             width: 100%;
@@ -222,16 +210,19 @@
 
         @media (max-width: 768px) {
             #main {
-                padding-top: 190px; /* xuống thêm một chút trên mobile */
+                padding-top: 190px;
             }
-            #scene{
+
+            #scene {
                 height: 271px !important;
             }
-            #text{
+
+            #text {
                 left: 24px;
-    top: 50px !important;
-    width: 450px !important;
+                top: 50px !important;
+                width: 450px !important;
             }
+
             #music-widget {
                 top: 10px;
                 right: 85px;
@@ -257,23 +248,27 @@
 
         <div id="music-panel">
             <strong>Chọn bài hát</strong>
+
             <select id="musicSelect">
                 <option value="music/Noi_nay_co_anh.mp3">Nơi này có anh</option>
                 <option value="music/I-Do-911.mp3">I Do - 911</option>
             </select>
 
-            <audio id="bgMusic" controls autoplay>
-                <source src="music/Noi_nay_co_anh.mp3" type="audio/mp3">
+            <audio id="bgMusic" controls autoplay muted loop playsinline>
+                <source src="music/Noi_nay_co_anh.mp3" type="audio/mpeg">
                 Trình duyệt không hỗ trợ audio.
             </audio>
+
+            <div id="music-tip">Chạm lần đầu vào màn hình để bật tiếng nếu trình duyệt chặn autoplay.</div>
         </div>
     </div>
 
     <div id="main">
         <div id="error">
-            Trình duyệt của bạn không được hỗ trợ. Để được hỗ trợ liên hệ daikupj@gmail.com.
-            Hoặc sử dụng (<a href="http://www.google.cn/chrome" target="_blank">Chrome</a>) và
-            (<a href="http://firefox.com/download/" target="_blank">Firefox</a>)
+            Trình duyệt của bạn không được hỗ trợ. Hãy dùng
+            <a href="https://www.google.com/chrome/" target="_blank">Chrome</a>
+            hoặc
+            <a href="https://www.mozilla.org/firefox/" target="_blank">Firefox</a>.
         </div>
 
         <div id="scene">
@@ -285,10 +280,10 @@
                             <span class="say"> </span><br>
                             <span class="say">Ngày 8/3 chúc một nửa thế giới luôn thành công trong cuộc sống!</span><br>
                             <span class="say">Chúc bạn luôn duyên dáng và xinh đẹp trong mắt một nửa thế giới còn lại.</span><br>
-                            <span class="say">Kính chúc "một nửa" của nhân loại vui vẻ, hạnh phúc bên người thân yêu</span><br>
+                            <span class="say">Kính chúc "một nửa" của nhân loại vui vẻ, hạnh phúc bên người thân yêu.</span><br>
                             <span class="say">
                                 <span class="space">
-                                    <img src="image/tym.png" alt=""><br>
+                                    <img src="image/tym.png" alt="Trái tim"><br>
                                 </span>
                             </span>
                             <span class="say">
@@ -297,12 +292,6 @@
                         </font>
                     </div>
                 </div>
-<!-- 
-                <div id="clock-box">
-                    <span class="STYLE1"></span>
-                    <font color="#FF0000">Ngày 8/3 cuối cùng ta ngồi với nhau đến nay đã....</font>
-                    <div id="clock"></div>
-                </div> -->
 
                 <canvas id="canvas" width="1100" height="680"></canvas>
             </div>
@@ -319,6 +308,7 @@
             var musicToggle = document.getElementById("music-toggle");
             var musicSelect = document.getElementById("musicSelect");
             var bgMusic = document.getElementById("bgMusic");
+            var musicTip = document.getElementById("music-tip");
 
             musicToggle.addEventListener("click", function (e) {
                 e.stopPropagation();
@@ -326,7 +316,7 @@
             });
 
             musicSelect.addEventListener("change", function () {
-                bgMusic.src = this.value;
+                bgMusic.innerHTML = '<source src="' + this.value + '" type="audio/mpeg">';
                 bgMusic.load();
                 bgMusic.play().catch(function () {});
             });
@@ -336,6 +326,21 @@
                     musicWidget.classList.remove("open");
                 }
             });
+
+            function enableSoundOnce() {
+                bgMusic.muted = false;
+                bgMusic.play().catch(function () {});
+                if (musicTip) {
+                    musicTip.style.display = "none";
+                }
+                document.removeEventListener("click", enableSoundOnce);
+                document.removeEventListener("touchstart", enableSoundOnce);
+            }
+
+            document.addEventListener("click", enableSoundOnce);
+            document.addEventListener("touchstart", enableSoundOnce, { passive: true });
+
+            bgMusic.play().catch(function () {});
         })();
     </script>
 
@@ -365,29 +370,14 @@
 
                 var text = document.getElementById("text");
                 var code = document.getElementById("code");
-                var clockBox = document.getElementById("clock-box");
-                var clock = document.getElementById("clock");
 
                 if (isMobile) {
                     text.style.left = "24px";
                     text.style.top = "210px";
-                    text.style.width = "340px"; /* rộng hơn trên mobile */
+                    text.style.width = "340px";
 
                     code.style.fontSize = "28px";
                     code.style.lineHeight = "1.95";
-                    code.style.padding = "0";
-                    code.style.borderRadius = "0";
-                    code.style.background = "transparent";
-
-                    clockBox.style.left = "32px";
-                    clockBox.style.bottom = "6px";
-                    clockBox.style.width = "300px";
-                    clockBox.style.fontSize = "22px";
-                    clockBox.style.lineHeight = "1.5";
-                    clockBox.style.padding = "10px 14px";
-                    clockBox.style.background = "rgba(255,255,255,0.62)";
-
-                    clock.style.fontSize = "28px";
 
                     var heartImg = document.querySelector("#code img");
                     if (heartImg) {
@@ -400,19 +390,6 @@
 
                     code.style.fontSize = "24px";
                     code.style.lineHeight = "1.9";
-                    code.style.padding = "0";
-                    code.style.borderRadius = "0";
-                    code.style.background = "transparent";
-
-                    clockBox.style.left = "70px";
-                    clockBox.style.bottom = "18px";
-                    clockBox.style.width = "auto";
-                    clockBox.style.fontSize = "24px";
-                    clockBox.style.lineHeight = "1.6";
-                    clockBox.style.padding = "10px 14px";
-                    clockBox.style.background = "rgba(255,255,255,0.38)";
-
-                    clock.style.fontSize = "26px";
 
                     var heartImgDesktop = document.querySelector("#code img");
                     if (heartImgDesktop) {
@@ -585,20 +562,7 @@
             }));
 
             var textAnimate = eval(Jscex.compile("async", function () {
-                var together = new Date();
-                together.setFullYear(2018, 2, 8);
-                together.setHours(0);
-                together.setMinutes(0);
-                together.setSeconds(0);
-                together.setMilliseconds(0);
-
                 $("#code").show().typewriter();
-                $("#clock-box").fadeIn(500);
-
-                while (true) {
-                    timeElapse(together);
-                    $await(Jscex.Async.sleep(1000));
-                }
             }));
 
             var runAsync = eval(Jscex.compile("async", function () {
@@ -615,4 +579,4 @@
         })();
     </script>
 </body>
-</html> 
+</html>
